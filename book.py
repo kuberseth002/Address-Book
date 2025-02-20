@@ -159,7 +159,7 @@ class AddressBook:
                 new_state = input("Enter new State:").strip() or contact.state
 
                 while True:
-                    new_zip_code = input("Enter new Zip Code (leave blank to keep existing): ").strip() or contact.zip_code
+                    new_zip_code = input("Enter new Zip Code").strip() or contact.zip_code
                     if new_zip_code.isdigit():
                         break
                     print("invalid zip code only numbers allowed.")
@@ -175,9 +175,9 @@ class AddressBook:
                 contact.zip_code = new_zip_code
 
                 print("\nContact updated successfully!")
-                return  # Exit after updating
+                return  
 
-        print("\nContact not found.")  # If no match is found
+        print("\nContact not found.")  
 
 def main():
     """Runs the Address Book program with a menu."""
