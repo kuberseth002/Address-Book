@@ -20,7 +20,6 @@ def add_contact(address_book):
     except Exception as e:
         print(f"Error: {e}")
 
-
 def view_contacts(address_book):
     """
     Displays all contacts stored in the address book.
@@ -36,7 +35,6 @@ def view_contacts(address_book):
     
     except Exception as e:
         print(f"Error: {e}")
-
 
 def main():
     """
@@ -64,10 +62,7 @@ def main():
         except Exception as e:
             print(f"Unexpected error: {e}")
 
-
-if __name__ == "__main__":
-    main()
-    
+ 
     
 # Using class
 class Contact:
@@ -93,7 +88,6 @@ class Contact:
         returns a formatted string representation of the contact.
         """
         return f"{self.first_name},{self.last_name},{self.phone},{self.email},{self.address},{self.city},{self.state},{self.zip_code}"
-
 
 class AddressBook:
     """
@@ -149,7 +143,6 @@ class AddressBook:
             for contact in self.contacts:
                 print(contact)
 
-
 def main():
     """runs the Address Book program with a menu."""
     address_book = AddressBook()
@@ -171,7 +164,6 @@ def main():
 
         except Exception as e:
             print(f"Unexpected error: {e}")
-
 
 if __name__ == "__main__":
     main()
