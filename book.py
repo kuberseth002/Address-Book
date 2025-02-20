@@ -66,11 +66,11 @@ def main():
 # Using class
 class Contact:
     """
-    represents a contact in the Address Book.
+    Represents a contact in the Address Book.
     """
     def __init__(self, first_name, last_name, phone, email, address, city, state, zip_code):
         """
-        initializes contact details.
+        Initializes contact details.
         """
         self.first_name = first_name
         self.last_name = last_name
@@ -83,7 +83,7 @@ class Contact:
             
     def __str__(self):
         """
-        returns a formatted string representation of the contact.
+        Returns a formatted string representation of the contact.
         """
         return f"{self.first_name},{self.last_name},{self.phone},{self.email},{self.address},{self.city},{self.state},{self.zip_code}"
 
@@ -136,7 +136,7 @@ class AddressBook:
             
     def view_contacts(self):
         """
-        displays all saved contacts.
+        Displays all saved contacts.
         """
         if not self.contacts:
             print("\nAddress Book is empty.")
@@ -146,7 +146,7 @@ class AddressBook:
                 print(contact)
                         
 def main():
-    """runs the Address Book program with a menu."""
+    """Runs the Address Book program with a menu."""
     address_book = AddressBook()
 
     while True:
