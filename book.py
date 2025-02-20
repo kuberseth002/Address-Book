@@ -162,7 +162,7 @@ class AddressBook:
                     new_zip_code = input("Enter new Zip Code (leave blank to keep existing): ").strip() or contact.zip_code
                     if new_zip_code.isdigit():
                         break
-                    print("Invalid zip code. Only numbers are allowed.")
+                    print("invalid zip code only numbers allowed.")
 
                 # Update contact details
                 contact.first_name = new_first_name
