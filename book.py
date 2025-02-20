@@ -118,7 +118,6 @@ class Contact:
     def __str__(self):
         return f"{self.first_name} {self.last_name}, {self.phone}, {self.email}, {self.address}, {self.city}, {self.state}, {self.zip_code}"
 
-
 class AddressBook:
     """
     Manages multiple contacts in the address book.
