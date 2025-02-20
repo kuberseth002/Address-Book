@@ -20,7 +20,6 @@ def add_contact(address_book):
     except Exception as e:
         print(f"Error: {e}")
 
-
 def view_contacts(address_book):
     """
     Displays all contacts stored in the address book.
@@ -32,11 +31,9 @@ def view_contacts(address_book):
         else:
             print("\nContacts List:")
             for contact in address_book:
-                print(f"{contact[0]} {contact[1]}, {contact[2]}, {contact[3]}, {contact[4]} {contact[5]}, {contact[6]}, {contact[7]}")
-    
+                print(f"{contact[0]} {contact[1]}, {contact[2]}, {contact[3]}, {contact[4]} {contact[5]}, {contact[6]}, {contact[7]}")  
     except Exception as e:
         print(f"Error: {e}")
-
 
 def main():
     """
@@ -60,10 +57,8 @@ def main():
                 break
             else:
                 print("Invalid choice! Please try again.")
-
         except Exception as e:
             print(f"Unexpected error: {e}")
-
 
 if __name__ == "__main__":
     main()
