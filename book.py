@@ -32,8 +32,7 @@ def view_contacts(address_book):
         else:
             print("\nContacts List:")
             for contact in address_book:
-                print(f"{contact[0]} {contact[1]}, {contact[2]}, {contact[3]}, {contact[4]} {contact[5]}, {contact[6]}, {contact[7]}")
-    
+                print(f"{contact[0]} {contact[1]}, {contact[2]}, {contact[3]}, {contact[4]} {contact[5]}, {contact[6]}, {contact[7]}")  
     except Exception as e:
         print(f"Error: {e}")
 
@@ -59,152 +58,8 @@ def main():
                 break
             else:
                 print("Invalid choice! Please try again.")
-
         except Exception as e:
             print(f"Unexpected error: {e}")
 
-# Using class
-class Contact:
-    """
-    Represents a contact in the Address Book.
-    """
-    def __init__(self, first_name, last_name, phone, email, address, city, state, zip_code):
-        """
-        Initializes contact details.
-        """
-        self.first_name = first_name
-        self.last_name = last_name
-        self.phone = phone
-        self.email = email
-        self.address = address
-        self.city = city
-        self.state = state
-        self.zip_code = zip_code
-            
-    def __str__(self):
-        """
-        Returns a formatted string representation of the contact.
-        """
-        return f"{self.first_name},{self.last_name},{self.phone},{self.email},{self.address},{self.city},{self.state},{self.zip_code}"
-
-class AddressBook:
-    """
-    Manages multiple contacts in the address book.
-    """   
-    def __init__(self):
-        """
-        Initializes an empty contact list.
-        """
-        self.contacts = []
-        
-    def add_contact(self):
-        """
-        Adds a new contact with error handling.
-        """
-        try:
-            while True:  
-                first_name = input("Enter First Name: ").strip()
-                last_name = input("Enter Last Name: ").strip()
-                address = input("Enter Address: ").strip()
-                city = input("Enter City: ").strip()
-                state = input("Enter State: ").strip()
-                phone = input("Enter Phone Number: ").strip()
-                email = input("Enter Email: ").strip()
-
-                while True:
-                    zip_code = input("Enter Zip Code: ").strip()
-                    if zip_code.isdigit():
-                        break
-                    else:
-                        print("Invalid zip code. Only numbers are allowed.")
-
-                if not all([first_name, last_name, phone, email, address, city, state, zip_code]):
-                    raise ValueError("All fields are required.")
-
-                contact = Contact(first_name, last_name, phone, email, address, city, state, zip_code)
-                self.contacts.append(contact)
-                print("\nContact added successfully!")
-
-                add_more = input("Want to add more contacts? (yes/no): ").strip().lower()
-                if add_more != "yes":
-                    break  
-                           
-        except ValueError as e:
-            print(f"Error: {e}")
-        except Exception as e:
-            print(f"Unexpected Error: {e}")
-            
-    def view_contacts(self):
-        """
-        Displays all saved contacts.
-        """
-        if not self.contacts:
-            print("\nAddress Book is empty.")
-        else:
-            print("\nContacts List:")
-            for contact in self.contacts:
-                print(contact)
-
-    def edit_contact(self, name):
-        """
-        edits an existing contact by full name.
-        """
-        for contact in self.contacts:
-            full_name = f"{contact.first_name} {contact.last_name}"
-            if full_name.lower() == name.lower():
-                print(f"\nEditing contact: {contact}")
-
-                # Get updated values while keeping existing values if left blank
-                new_first_name = input("Enter new First Name:").strip() or contact.first_name
-                new_last_name = input("Enter new Last Name:").strip() or contact.last_name
-                new_phone = input("Enter new Phone Number:").strip() or contact.phone
-                new_email = input("Enter new Email:").strip() or contact.email
-                new_address = input("Enter new Address:").strip() or contact.address
-                new_city = input("Enter new City:").strip() or contact.city
-                new_state = input("Enter new State:").strip() or contact.state
-
-                while True:
-                    new_zip_code = input("Enter new Zip Code (leave blank to keep existing): ").strip() or contact.zip_code
-                    if new_zip_code.isdigit():
-                        break
-                    print("invalid zip code only numbers allowed.")
-
-                # Update contact details
-                contact.first_name = new_first_name
-                contact.last_name = new_last_name
-                contact.phone = new_phone
-                contact.email = new_email
-                contact.address = new_address
-                contact.city = new_city
-                contact.state = new_state
-                contact.zip_code = new_zip_code
-
-                print("\nContact updated successfully!")
-                return  # Exit after updating
-
-        print("\nContact not found.")  # If no match is found
-
-def main():
-    """Runs the Address Book program with a menu."""
-    address_book = AddressBook()
-
-    while True:
-        try:
-            print("\n1️ Add Contact\n2️ View Contacts\n3 Exit")
-            choice = input("Choose an option: ").strip()
-
-            if choice == "1":
-                address_book.add_contact()
-            elif choice == "2":
-                address_book.view_contacts()
-            elif choice=="3":
-                print("Exiting Address Book.")
-                break
-            else:
-                print("Invalid choice,enter 1, 2,3")
-
-        except Exception as e:
-            print(f"Unexpected error: {e}")
-            
 if __name__ == "__main__":
     main()
