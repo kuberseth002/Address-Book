@@ -76,7 +76,6 @@ def main():
     except Exception as e:
         print(f"Error: {e}")
 
-
     """
     Main function that runs the Address Book program.
     Provides a menu for adding and viewing contacts.
@@ -107,9 +106,6 @@ class Contact:
     Represents a contact in the Address Book.
     """
     def __init__(self, first_name, last_name, phone, email, address, city, state, zip_code):
-        """
-        Initializes contact details.
-        """
         self.first_name = first_name
         self.last_name = last_name
         self.phone = phone
@@ -120,10 +116,7 @@ class Contact:
         self.zip_code = zip_code
 
     def __str__(self):
-        """
-        Returns a formatted string representation of the contact.
-        """
-        return f"{self.first_name}, {self.last_name}, {self.phone}, {self.email}, {self.address}, {self.city}, {self.state}, {self.zip_code}"
+        return f"{self.first_name} {self.last_name}, {self.phone}, {self.email}, {self.address}, {self.city}, {self.state}, {self.zip_code}"
 
 
 class AddressBook:
@@ -131,47 +124,41 @@ class AddressBook:
     Manages multiple contacts in the address book.
     """
     def __init__(self):
-        """
-        Initializes an empty contact list.
-        """
         self.contacts = []
 
     def add_contact(self):
-        """
-        Adds a new contact with error handling.
-        """
+        """ Adds a new contact with validation """
         try:
-            first_name = input("Enter First Name: ").strip()
-            last_name = input("Enter Last Name: ").strip()
-            address = input("Enter Address: ").strip()
-            city = input("Enter City: ").strip()
-            state = input("Enter State: ").strip()
-            phone = input("Enter Phone Number: ").strip()
-            email = input("Enter Email: ").strip()
-
             while True:
+                first_name = input("Enter First Name: ").strip()
+                last_name = input("Enter Last Name: ").strip()
+                address = input("Enter Address: ").strip()
+                city = input("Enter City: ").strip()
+                state = input("Enter State: ").strip()
+                phone = input("Enter Phone Number: ").strip()
+                email = input("Enter Email: ").strip()
+
                 zip_code = input("Enter Zip Code: ").strip()
-                if zip_code.isdigit():
-                    break
-                else:
+                if not zip_code.isdigit():
                     print("Invalid zip code. Only numbers are allowed.")
+                    continue
 
-            if not all([first_name, last_name, phone, email, address, city, state, zip_code]):
-                raise ValueError("All fields are required.")
+                if not all([first_name, last_name, phone, email, address, city, state, zip_code]):
+                    raise ValueError("All fields are required.")
 
-            contact = Contact(first_name, last_name, phone, email, address, city, state, zip_code)
-            self.contacts.append(contact)
-            print("\nContact added successfully!")
-
+                self.contacts.append(Contact(first_name, last_name, phone, email, address, city, state, zip_code))
+                print("\nContact added successfully!")
+                
+                add_more = input("Do you want to add another contact? (yes/no): ").strip().lower()
+                if add_more != 'yes':
+                    break
         except ValueError as e:
             print(f"Error: {e}")
         except Exception as e:
             print(f"Unexpected Error: {e}")
 
     def view_contacts(self):
-        """
-        Displays all saved contacts.
-        """
+        """ Displays all saved contacts """
         if not self.contacts:
             print("\nAddress Book is empty.")
         else:
@@ -180,63 +167,48 @@ class AddressBook:
                 print(contact)
 
     def edit_contact(self, name):
-        """
-        Edits an existing contact by full name.
-        """
+        """ Edits an existing contact by full name """
         for contact in self.contacts:
             full_name = f"{contact.first_name} {contact.last_name}"
-            if full_name.lower() == name.lower():
+            if full_name.lower().strip() == name.lower().strip():
                 print(f"\nEditing contact: {contact}")
 
-                # Get updated values while keeping existing values if left blank
-                new_first_name = input("Enter new First Name: ").strip() or contact.first_name
-                new_last_name = input("Enter new Last Name: ").strip() or contact.last_name
-                new_phone = input("Enter new Phone Number: ").strip() or contact.phone
-                new_email = input("Enter new Email: ").strip() or contact.email
-                new_address = input("Enter new Address: ").strip() or contact.address
-                new_city = input("Enter new City: ").strip() or contact.city
-                new_state = input("Enter new State: ").strip() or contact.state
+                contact.first_name = input("Enter new First Name: ").strip() or contact.first_name
+                contact.last_name = input("Enter new Last Name: ").strip() or contact.last_name
+                contact.phone = input("Enter new Phone Number: ").strip() or contact.phone
+                contact.email = input("Enter new Email: ").strip() or contact.email
+                contact.address = input("Enter new Address: ").strip() or contact.address
+                contact.city = input("Enter new City: ").strip() or contact.city
+                contact.state = input("Enter new State: ").strip() or contact.state
 
-                while True:
-                    new_zip_code = input("Enter new Zip Code: ").strip() or contact.zip_code
-                    if new_zip_code.isdigit():
-                        break
-                    print("Invalid zip code. Only numbers are allowed.")
-
-                # Update contact details
-                contact.first_name = new_first_name
-                contact.last_name = new_last_name
-                contact.phone = new_phone
-                contact.email = new_email
-                contact.address = new_address
-                contact.city = new_city
-                contact.state = new_state
-                contact.zip_code = new_zip_code
+                zip_code = input("Enter new Zip Code: ").strip()
+                if zip_code.isdigit():
+                    contact.zip_code = zip_code
+                else:
+                    print("Invalid zip code. Keeping the old one.")
 
                 print("\nContact updated successfully!")
                 return  
-
+        
         print("\nContact not found.") 
 
     def delete_contact(self, name):
-        """
-        Deletes an existing contact by full name.
-        """
+        """ Deletes an existing contact by full name """
         for contact in self.contacts:
             full_name = f"{contact.first_name} {contact.last_name}"
-            if full_name.lower() == name.lower():
+            if full_name.lower().strip() == name.lower().strip():
                 self.contacts.remove(contact)
                 print("\nContact deleted successfully!")
                 return
         print("\nContact not found.")
 
 def main():
-    """Runs the Address Book program with a menu."""
+    """ Runs the Address Book program with a menu. """
     address_book = AddressBook()
 
     while True:
         try:
-            print("\n1️ Add Contact\n2️ View Contacts\n3️ Edit Contact\n4️ Delete Contact\n5️ Exit")
+            print("\n1. Add Contact\n2. View Contacts\n3. Edit Contact\n4. Delete Contact\n5. Exit")
             choice = input("Choose an option: ").strip()
 
             if choice == "1":
@@ -253,7 +225,7 @@ def main():
                 print("Exiting Address Book.")
                 break
             else:
-                print("Invalid choice! Please enter 1, 2, 3, 4, or 5.")
+                print("Invalid choice! Please enter a number between 1 and 5.")
 
         except Exception as e:
             print(f"Unexpected error: {e}")
