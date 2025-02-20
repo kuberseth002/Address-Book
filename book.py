@@ -61,8 +61,7 @@ def main():
         except Exception as e:
             print(f"Unexpected error: {e}")
 
- 
-    
+   
 # Using class
 class Contact:
     """
@@ -140,6 +139,44 @@ class AddressBook:
             print("\nContacts List:")
             for contact in self.contacts:
                 print(contact)
+                
+    def edit_contact(self, name):
+        """
+        edits an existing contact by full name.
+        """
+        for contact in self.contacts:
+            full_name = f"{contact.first_name} {contact.last_name}"
+            if full_name.lower() == name.lower():
+                print(f"\nEditing contact: {contact}")
+
+                # Get updated values while keeping existing values if left blank
+                new_first_name = input("Enter new First Name:").strip() or contact.first_name
+                new_last_name = input("Enter new Last Name:").strip() or contact.last_name
+                new_phone = input("Enter new Phone Number:").strip() or contact.phone
+                new_email = input("Enter new Email:").strip() or contact.email
+                new_address = input("Enter new Address:").strip() or contact.address
+                new_city = input("Enter new City:").strip() or contact.city
+                new_state = input("Enter new State:").strip() or contact.state
+
+                while True:
+                    new_zip_code = input("Enter new Zip Code").strip() or contact.zip_code
+                    if new_zip_code.isdigit():
+                        break
+                    print("invalid zip code only numbers allowed.")
+
+                contact.first_name = new_first_name
+                contact.last_name = new_last_name
+                contact.phone = new_phone
+                contact.email = new_email
+                contact.address = new_address
+                contact.city = new_city
+                contact.state = new_state
+                contact.zip_code = new_zip_code
+
+                print("\nContact updated successfully!")
+                return  
+
+        print("\nContact not found.")  
 
 def main():
     """runs the Address Book program with a menu."""
