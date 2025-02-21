@@ -142,7 +142,11 @@ class AddressBook:
 
             if not all([first_name, last_name, phone, email, address, city, state, zip_code]):
                 raise ValueError("All fields are required.")
-
+            
+            # check duplicate
+            for contact in self.contacts:
+                if contact.first_name==first_name and contact.last_name==last_name and contact.phone==phone:
+                    raise ValueError("duplicate contact found person already exist")
             self.contacts.append(Contact(first_name, last_name, phone, email, address, city, state, zip_code))
             print("\nContact added successfully!")
         except ValueError as e:
@@ -168,17 +172,18 @@ class AddressBookSystem:
         self.current_book = None
 
     def create_address_book(self):
-        """ Creates a new Address Book """
-        try:
-            name = input("Enter Address Book Name: ").strip()
-            if name in self.address_books:
-                raise ValueError("Address Book with this name already exists.")
-            self.address_books[name] = AddressBook(name)
-            print(f"\nAddress Book '{name}' created successfully!")
-        except ValueError as e:
-            print(f"Error: {e}")
-        except Exception as e:
-            print(f"Unexpected Error: {e}")
+     """ Creates a new Address Book and selects it as current """
+     try:
+        name = input("Enter Address Book Name: ").strip()
+        if name in self.address_books:
+            raise ValueError("Address Book with this name already exists.")
+        self.address_books[name] = AddressBook(name)
+        self.current_book = self.address_books[name]  # Auto-select the newly created book
+        print(f"\nAddress Book '{name}' created successfully and set as active!")
+     except ValueError as e:
+        print(f"Error: {e}")
+     except Exception as e:
+        print(f"Unexpected Error: {e}")
 
     def switch_address_book(self):
         """ Switches to another Address Book """
