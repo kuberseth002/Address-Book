@@ -163,6 +163,18 @@ class AddressBook:
             print(f"contact found in {city}:")
         else:
             print(f"no contacts found in {city}:")
+            
+    
+    def view_state(self,state):
+        """
+        view person by state        
+        """
+        match=[contact for contact in self.contacts if contact.state.lower()==state.lower()]
+        if match:
+            print(f"contact found in {state}:")
+        else:
+            print(f"no contacts found in {state}:")
+        
 
     def view_contacts(self):
         """ Displays all saved contacts """
@@ -212,7 +224,7 @@ class AddressBookSystem:
         """ Runs the Address Book System with a menu """
         while True:
             try:
-                print("\n1. Create Address Book\n2. Switch Address Book\n3. Add Contact\n4. View Contacts  \n5. Search by City \n6. Exit")
+                print("\n1. Create Address Book\n2. Switch Address Book\n3. Add Contact\n4. View Contacts  \n5. Search by City \n6. view by state \n7. Exit")
                 choice = input("Choose an option: ").strip()
 
                 if choice == "1":
@@ -235,11 +247,19 @@ class AddressBookSystem:
                         self.current_book.search_city(city)
                     else:
                         print("\nNo Address Book selected. Please switch to one first.")
+                
                 elif choice == "6":
+                    if self.current_book:
+                        state = input("Enter state name to view: ").strip()
+                        self.current_book.view_state(state)
+                    else:
+                        print("\nNo Address Book selected. Please switch to one first.")
+                
+                elif choice == "7":
                     print("Exiting Address Book System.")
                     break
                 else:
-                    print("Invalid choice! Please enter a number between 1 and 5.")
+                    print("Invalid choice! Please enter a number between 1 and 7.")
             except Exception as e:
                 print(f"Unexpected error: {e}")
 
