@@ -153,6 +153,16 @@ class AddressBook:
             print(f"Error: {e}")
         except Exception as e:
             print(f"Unexpected Error: {e}")
+    
+    def search_city(self,city):
+        """
+        search and display by particular city
+        """
+        match=[contact for contact in self.contacts if contact.city.lower()==city.lower()]
+        if match:
+            print(f"contact found in {city}:")
+        else:
+            print(f"no contacts found in {city}:")
 
     def view_contacts(self):
         """ Displays all saved contacts """
@@ -202,7 +212,7 @@ class AddressBookSystem:
         """ Runs the Address Book System with a menu """
         while True:
             try:
-                print("\n1. Create Address Book\n2. Switch Address Book\n3. Add Contact\n4. View Contacts\n5. Exit")
+                print("\n1. Create Address Book\n2. Switch Address Book\n3. Add Contact\n4. View Contacts  \n5. Search by City \n6. Exit")
                 choice = input("Choose an option: ").strip()
 
                 if choice == "1":
@@ -220,6 +230,12 @@ class AddressBookSystem:
                     else:
                         print("\nNo Address Book selected. Please switch to one first.")
                 elif choice == "5":
+                    if self.current_book:
+                        city = input("Enter city name to search: ").strip()
+                        self.current_book.search_city(city)
+                    else:
+                        print("\nNo Address Book selected. Please switch to one first.")
+                elif choice == "6":
                     print("Exiting Address Book System.")
                     break
                 else:
