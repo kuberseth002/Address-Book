@@ -100,7 +100,6 @@ def main():
         except Exception as e:
             print(f"Unexpected error: {e}")
 
-# Using class
 class Contact:
     """
     Represents a contact in the Address Book.
@@ -117,40 +116,35 @@ class Contact:
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}, {self.phone}, {self.email}, {self.address}, {self.city}, {self.state}, {self.zip_code}"
-
+    
 class AddressBook:
     """
-    Manages multiple contacts in the address book.
+    Represents an Address Book containing multiple contacts.
     """
-    def __init__(self):
+    def __init__(self, name):
+        self.name = name
         self.contacts = []
 
     def add_contact(self):
         """ Adds a new contact with validation """
         try:
-            while True:
-                first_name = input("Enter First Name: ").strip()
-                last_name = input("Enter Last Name: ").strip()
-                address = input("Enter Address: ").strip()
-                city = input("Enter City: ").strip()
-                state = input("Enter State: ").strip()
-                phone = input("Enter Phone Number: ").strip()
-                email = input("Enter Email: ").strip()
+            first_name = input("Enter First Name: ").strip()
+            last_name = input("Enter Last Name: ").strip()
+            phone = input("Enter Phone Number: ").strip()
+            email = input("Enter Email: ").strip()
+            address = input("Enter Address: ").strip()
+            city = input("Enter City: ").strip()
+            state = input("Enter State: ").strip()
+            zip_code = input("Enter Zip Code: ").strip()
 
-                zip_code = input("Enter Zip Code: ").strip()
-                if not zip_code.isdigit():
-                    print("Invalid zip code. Only numbers are allowed.")
-                    continue
+            if not zip_code.isdigit():
+                raise ValueError("Invalid zip code. Only numbers are allowed.")
 
-                if not all([first_name, last_name, phone, email, address, city, state, zip_code]):
-                    raise ValueError("All fields are required.")
+            if not all([first_name, last_name, phone, email, address, city, state, zip_code]):
+                raise ValueError("All fields are required.")
 
-                self.contacts.append(Contact(first_name, last_name, phone, email, address, city, state, zip_code))
-                print("\nContact added successfully!")
-                
-                add_more = input("Do you want to add another contact? (yes/no): ").strip().lower()
-                if add_more != 'yes':
-                    break
+            self.contacts.append(Contact(first_name, last_name, phone, email, address, city, state, zip_code))
+            print("\nContact added successfully!")
         except ValueError as e:
             print(f"Error: {e}")
         except Exception as e:
@@ -161,73 +155,73 @@ class AddressBook:
         if not self.contacts:
             print("\nAddress Book is empty.")
         else:
-            print("\nContacts List:")
+            print(f"\nContacts in {self.name}:")
             for contact in self.contacts:
                 print(contact)
 
-    def edit_contact(self, name):
-        """ Edits an existing contact by full name """
-        for contact in self.contacts:
-            full_name = f"{contact.first_name} {contact.last_name}"
-            if full_name.lower().strip() == name.lower().strip():
-                print(f"\nEditing contact: {contact}")
+class AddressBookSystem:
+    """
+    Manages multiple Address Books.
+    """
+    def __init__(self):
+        self.address_books = {}
+        self.current_book = None
 
-                contact.first_name = input("Enter new First Name: ").strip() or contact.first_name
-                contact.last_name = input("Enter new Last Name: ").strip() or contact.last_name
-                contact.phone = input("Enter new Phone Number: ").strip() or contact.phone
-                contact.email = input("Enter new Email: ").strip() or contact.email
-                contact.address = input("Enter new Address: ").strip() or contact.address
-                contact.city = input("Enter new City: ").strip() or contact.city
-                contact.state = input("Enter new State: ").strip() or contact.state
-
-                zip_code = input("Enter new Zip Code: ").strip()
-                if zip_code.isdigit():
-                    contact.zip_code = zip_code
-                else:
-                    print("Invalid zip code. Keeping the old one.")
-
-                print("\nContact updated successfully!")
-                return  
-        
-        print("\nContact not found.") 
-
-    def delete_contact(self, name):
-        """ Deletes an existing contact by full name """
-        for contact in self.contacts:
-            full_name = f"{contact.first_name} {contact.last_name}"
-            if full_name.lower().strip() == name.lower().strip():
-                self.contacts.remove(contact)
-                print("\nContact deleted successfully!")
-                return
-        print("\nContact not found.")
-
-def main():
-    """ Runs the Address Book program with a menu. """
-    address_book = AddressBook()
-
-    while True:
+    def create_address_book(self):
+        """ Creates a new Address Book """
         try:
-            print("\n1. Add Contact\n2. View Contacts\n3. Edit Contact\n4. Delete Contact\n5. Exit")
-            choice = input("Choose an option: ").strip()
-
-            if choice == "1":
-                address_book.add_contact()
-            elif choice == "2":
-                address_book.view_contacts()
-            elif choice == "3":
-                name = input("Enter the full name of the contact to edit: ").strip()
-                address_book.edit_contact(name)
-            elif choice == "4":
-                name = input("Enter the full name of the contact to delete: ").strip()
-                address_book.delete_contact(name)
-            elif choice == "5":
-                print("Exiting Address Book.")
-                break
-            else:
-                print("Invalid choice! Please enter a number between 1 and 5.")
-
+            name = input("Enter Address Book Name: ").strip()
+            if name in self.address_books:
+                raise ValueError("Address Book with this name already exists.")
+            self.address_books[name] = AddressBook(name)
+            print(f"\nAddress Book '{name}' created successfully!")
+        except ValueError as e:
+            print(f"Error: {e}")
         except Exception as e:
-            print(f"Unexpected error: {e}")
+            print(f"Unexpected Error: {e}")
+
+    def switch_address_book(self):
+        """ Switches to another Address Book """
+        try:
+            name = input("Enter Address Book Name to Switch To: ").strip()
+            if name not in self.address_books:
+                raise ValueError("Address Book not found.")
+            self.current_book = self.address_books[name]
+            print(f"\nSwitched to Address Book '{name}'")
+        except ValueError as e:
+            print(f"Error: {e}")
+        except Exception as e:
+            print(f"Unexpected Error: {e}")
+
+    def main_menu(self):
+        """ Runs the Address Book System with a menu """
+        while True:
+            try:
+                print("\n1. Create Address Book\n2. Switch Address Book\n3. Add Contact\n4. View Contacts\n5. Exit")
+                choice = input("Choose an option: ").strip()
+
+                if choice == "1":
+                    self.create_address_book()
+                elif choice == "2":
+                    self.switch_address_book()
+                elif choice == "3":
+                    if self.current_book:
+                        self.current_book.add_contact()
+                    else:
+                        print("\nNo Address Book selected. Please switch to one first.")
+                elif choice == "4":
+                    if self.current_book:
+                        self.current_book.view_contacts()
+                    else:
+                        print("\nNo Address Book selected. Please switch to one first.")
+                elif choice == "5":
+                    print("Exiting Address Book System.")
+                    break
+                else:
+                    print("Invalid choice! Please enter a number between 1 and 5.")
+            except Exception as e:
+                print(f"Unexpected error: {e}")
 
 if __name__ == "__main__":
-    main()
+    system = AddressBookSystem()
+    system.main_menu()
