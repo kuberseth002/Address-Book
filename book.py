@@ -174,8 +174,21 @@ class AddressBook:
             print(f"contact found in {state}:")
         else:
             print(f"no contacts found in {state}:")
+    
+    def count_city(self,city):
+        """
+        count contacts in city
+        """
+        count=sum(1 for contact in self.contacts if contact.city.lower()==city.lower())
+        print(f"number of contact in {city}:{count}")
+    
+    def count_state(self,state):
+        """
+        count contact in state
+        """        
+        count=sum(1 for contact in self.contacts if contact.state.lower()==state.lower())
+        print(f"number of contact in {state}:{count}")
         
-
     def view_contacts(self):
         """ Displays all saved contacts """
         if not self.contacts:
@@ -224,7 +237,7 @@ class AddressBookSystem:
         """ Runs the Address Book System with a menu """
         while True:
             try:
-                print("\n1. Create Address Book\n2. Switch Address Book\n3. Add Contact\n4. View Contacts  \n5. Search by City \n6. view by state \n7. Exit")
+                print("\n1. Create Address Book\n2. Switch Address Book\n3. Add Contact\n4. View Contacts  \n5. Search by City \n6. view by state  \n7. count contact by city  \n8. count contact by state \n9. Exit")
                 choice = input("Choose an option: ").strip()
 
                 if choice == "1":
@@ -246,20 +259,31 @@ class AddressBookSystem:
                         city = input("Enter city name to search: ").strip()
                         self.current_book.search_city(city)
                     else:
-                        print("\nNo Address Book selected. Please switch to one first.")
+                        print("\nNo Address Book selected.")
                 
                 elif choice == "6":
                     if self.current_book:
                         state = input("Enter state name to view: ").strip()
                         self.current_book.view_state(state)
                     else:
-                        print("\nNo Address Book selected. Please switch to one first.")
-                
+                        print("\nNo Address Book selected.")
                 elif choice == "7":
+                    if self.current_book:
+                        city = input("Enter city name to count contacts: ").strip()
+                        self.current_book.count_by_city(city)
+                    else:
+                        print("\nNo Address Book selected.")
+                elif choice == "8":
+                    if self.current_book:
+                        state = input("Enter state name to count contacts: ").strip()
+                        self.current_book.count_by_state(state)
+                    else:
+                        print("\nNo Address Book selected.")
+                elif choice == "9":
                     print("Exiting Address Book System.")
                     break
                 else:
-                    print("Invalid choice! Please enter a number between 1 and 7.")
+                    print("Invalid choice! Please enter a number between 1 and 9.")
             except Exception as e:
                 print(f"Unexpected error: {e}")
 
