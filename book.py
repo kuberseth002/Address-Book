@@ -188,13 +188,20 @@ class AddressBook:
         """        
         count=sum(1 for contact in self.contacts if contact.state.lower()==state.lower())
         print(f"number of contact in {state}:{count}")
+    
+    def sort_contacts(self):
+        """ Sort contacts alphabetically by first name, then last name """
+        def compare(contact):
+            return contact.first_name.lower(), contact.last_name.lower()       
+        self.contacts.sort(key=compare)
         
     def view_contacts(self):
         """ Displays all saved contacts """
         if not self.contacts:
             print("\nAddress Book is empty.")
         else:
-            print(f"\nContacts in {self.name}:")
+            self.sort_contacts()
+            print(f"\ncontacts in {self.name}:")
             for contact in self.contacts:
                 print(contact)
 
@@ -237,7 +244,7 @@ class AddressBookSystem:
         """ Runs the Address Book System with a menu """
         while True:
             try:
-                print("\n1. Create Address Book\n2. Switch Address Book\n3. Add Contact\n4. View Contacts  \n5. Search by City \n6. view by state  \n7. count contact by city  \n8. count contact by state \n9. Exit")
+                print("\n1. Create Address Book\n2. Switch Address Book\n3. Add Contact\n4. View Contacts  \n5. Search by City \n6. view by state  \n7. count contact by city  \n8. count contact by state \n9.sort alphabetically \n10. Exit")
                 choice = input("Choose an option: ").strip()
 
                 if choice == "1":
@@ -280,10 +287,16 @@ class AddressBookSystem:
                     else:
                         print("\nNo Address Book selected.")
                 elif choice == "9":
+                    if self.current_book:
+                        sort = input("search alphabetcally").strip()
+                        self.current_book.sort_contacts(sort)
+                    else:
+                        print("\nNo Address Book selected.")
+                elif choice == "10":
                     print("Exiting Address Book System.")
                     break
                 else:
-                    print("Invalid choice! Please enter a number between 1 and 9.")
+                    print("Invalid choice! Please enter a number between 1 and 10.")
             except Exception as e:
                 print(f"Unexpected error: {e}")
 
