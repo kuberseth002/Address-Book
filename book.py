@@ -194,14 +194,23 @@ class AddressBook:
         def compare(contact):
             return contact.first_name.lower(), contact.last_name.lower()       
         self.contacts.sort(key=compare)
+    
+    def sort_by_zip(self):
+        """ Sorts contacts numerically by zip code """
+        def compare_zip(contact):
+            return int(contact.zip_code)
+        self.contacts.sort(key=compare_zip)
         
-    def view_contacts(self):
+    def view_contacts(self,sort_by="name"):
         """ Displays all saved contacts """
         if not self.contacts:
             print("\nAddress Book is empty.")
         else:
-            self.sort_contacts()
-            print(f"\ncontacts in {self.name}:")
+            if sort_by == "zip":
+                self.sort_by_zip()
+            else:
+                self.sort_contacts()
+            print(f"\nContacts in {self.name}:")
             for contact in self.contacts:
                 print(contact)
 
@@ -244,7 +253,7 @@ class AddressBookSystem:
         """ Runs the Address Book System with a menu """
         while True:
             try:
-                print("\n1. Create Address Book\n2. Switch Address Book\n3. Add Contact\n4. View Contacts  \n5. Search by City \n6. view by state  \n7. count contact by city  \n8. count contact by state \n9.sort alphabetically \n10. Exit")
+                print("\n1. Create Address Book\n2. Switch Address Book\n3. Add Contact\n4. View Contacts  \n5. Search by City \n6. view by state  \n7. count contact by city  \n8. count contact by state \n9.sort alphabetically \n10. sort by zip \n11. Exit")
                 choice = input("Choose an option: ").strip()
 
                 if choice == "1":
@@ -288,11 +297,17 @@ class AddressBookSystem:
                         print("\nNo Address Book selected.")
                 elif choice == "9":
                     if self.current_book:
-                        sort = input("search alphabetcally").strip()
+                        sort = input("search alphabetcally:").strip()
                         self.current_book.sort_contacts(sort)
                     else:
                         print("\nNo Address Book selected.")
                 elif choice == "10":
+                    if self.current_book:
+                        sort_zip = input("search by zip:").strip()
+                        self.current_book.sort_by_zip(sort_zip)
+                    else:
+                        print("\nNo Address Book selected.")
+                elif choice == "11":
                     print("Exiting Address Book System.")
                     break
                 else:
