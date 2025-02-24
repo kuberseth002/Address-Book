@@ -1,0 +1,12 @@
+[
+    {
+        "first_name": "kuber",
+        "last_name": "seth",
+        "phone": "8546",
+        "email": "ku@gmial.com",
+        "address": "845",
+        "city": "patiala",
+        "state": "punjba",
+        "zip_code": "14700"
+    }
+]

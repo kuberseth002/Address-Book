@@ -100,6 +100,8 @@ def main():
         except Exception as e:
             print(f"Unexpected error: {e}")
 
+import json
+
 class Contact:
     """
     Represents a contact in the Address Book.
@@ -117,6 +119,14 @@ class Contact:
     def __str__(self):
         return f"{self.first_name} {self.last_name}, {self.phone}, {self.email}, {self.address}, {self.city}, {self.state}, {self.zip_code}"
     
+    def to_dict(self):
+        return self.__dict__
+    
+    @classmethod
+    def from_dict(cls, data):
+        return cls(**data)
+    
+    
 class AddressBook:
     """
     Represents an Address Book containing multiple contacts.
@@ -124,6 +134,8 @@ class AddressBook:
     def __init__(self, name):
         self.name = name
         self.contacts = []
+        self.filename=f"{self.name}.json"
+        self.load_contacts()
 
     def add_contact(self):
         """ Adds a new contact with validation """
@@ -153,6 +165,46 @@ class AddressBook:
             print(f"Error: {e}")
         except Exception as e:
             print(f"Unexpected Error: {e}")
+            
+    def save_contacts(self):
+        """ Saves contacts to a file """
+        with open(self.filename, 'w') as file:
+            json.dump([contact.to_dict() for contact in self.contacts], file, indent=4)
+    
+    def load_contacts(self):
+     """ Loads contacts from a file """
+     try:
+        with open(self.filename, 'r') as file:
+            data = json.load(file)
+            if isinstance(data, list):  # Ensure we have a list
+                self.contacts = [Contact.from_dict(contact) for contact in data]
+        print(f"Contacts loaded from {self.filename}")
+     except FileNotFoundError:
+        self.contacts = []
+        print(f"No existing file found for {self.filename}, starting fresh.")
+     except json.JSONDecodeError:
+        self.contacts = []
+        print("Error decoding JSON file. Starting fresh.")
+
+    def save_to_file(self, filename):
+        """ Saves contacts to a specified file """
+        with open(filename, 'w') as file:
+            json.dump([contact.to_dict() for contact in self.contacts], file, indent=4)
+        print(f"Contacts saved to {filename}")
+    
+    def load_from_file(self, filename):
+     """ Loads contacts from a specified file """
+     try:
+        with open(filename, 'r') as file:
+            data = json.load(file)
+            if isinstance(data, list):  # Ensure data is a list
+                self.contacts = [Contact.from_dict(contact) for contact in data]
+            print(f"Contacts successfully loaded from {filename}")
+     except FileNotFoundError:
+        print("File not found. No contacts loaded.")
+     except json.JSONDecodeError:
+        print("Error decoding JSON file. No contacts loaded.")
+        
     
     def search_city(self,city):
         """
@@ -222,8 +274,12 @@ class AddressBookSystem:
         self.address_books = {}
         self.current_book = None
 
+    def get_address_book(self, name):
+        return self.address_books.get(name)
+
     def create_address_book(self):
      """ Creates a new Address Book and selects it as current """
+     
      try:
         name = input("Enter Address Book Name: ").strip()
         if name in self.address_books:
@@ -253,7 +309,7 @@ class AddressBookSystem:
         """ Runs the Address Book System with a menu """
         while True:
             try:
-                print("\n1. Create Address Book\n2. Switch Address Book\n3. Add Contact\n4. View Contacts  \n5. Search by City \n6. view by state  \n7. count contact by city  \n8. count contact by state \n9.sort alphabetically \n10. sort by zip \n11. Exit")
+                print("\n1. Create Address Book\n2. Switch Address Book\n3. Add Contact\n4. View Contacts  \n5. Search by City \n6. view by state  \n7. count contact by city  \n8. count contact by state \n9.sort alphabetically \n10. sort by zip \n11.Save address book \n12.Load address book \n13. Exit")
                 choice = input("Choose an option: ").strip()
 
                 if choice == "1":
@@ -286,13 +342,13 @@ class AddressBookSystem:
                 elif choice == "7":
                     if self.current_book:
                         city = input("Enter city name to count contacts: ").strip()
-                        self.current_book.count_by_city(city)
+                        self.current_book.count_city(city)
                     else:
                         print("\nNo Address Book selected.")
                 elif choice == "8":
                     if self.current_book:
                         state = input("Enter state name to count contacts: ").strip()
-                        self.current_book.count_by_state(state)
+                        self.current_book.count_state(state)
                     else:
                         print("\nNo Address Book selected.")
                 elif choice == "9":
@@ -307,11 +363,30 @@ class AddressBookSystem:
                         self.current_book.sort_by_zip(sort_zip)
                     else:
                         print("\nNo Address Book selected.")
+                
                 elif choice == "11":
+                    book_name = input("Enter Address Book name: ").strip()
+                    address_book = self.get_address_book(book_name)
+                    if address_book:
+                        filename = input("Enter filename to save to (e.g., 'book.txt'): ").strip()
+                        address_book.save_to_file(filename)
+                    else:
+                        print(f"Address Book '{book_name}' does not exist!")
+                
+                elif choice == "12":
+                    book_name = input("Enter Address Book name: ").strip()
+                    address_book = self.get_address_book(book_name)
+                    if address_book:
+                        filename = input("Enter filename to load from (e.g., 'book.txt'): ").strip()
+                        address_book.load_from_file(filename)
+                    else:
+                        print(f"Address Book '{book_name}' does not exist!")
+                  
+                elif choice == "13":
                     print("Exiting Address Book System.")
                     break
                 else:
-                    print("Invalid choice! Please enter a number between 1 and 10.")
+                    print("Invalid choice! Please enter a number between 1 and 13.")
             except Exception as e:
                 print(f"Unexpected error: {e}")
 
