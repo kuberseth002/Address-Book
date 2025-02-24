@@ -101,6 +101,7 @@ def main():
             print(f"Unexpected error: {e}")
 
 import json
+import csv
 
 class Contact:
     """
@@ -135,6 +136,7 @@ class AddressBook:
         self.name = name
         self.contacts = []
         self.filename=f"{self.name}.json"
+        self.csv_filename = f"{self.name}.csv"
         self.load_contacts()
 
     def add_contact(self):
@@ -204,6 +206,33 @@ class AddressBook:
         print("File not found. No contacts loaded.")
      except json.JSONDecodeError:
         print("Error decoding JSON file. No contacts loaded.")
+        
+    def save_to_csv(self):
+        """ Saves contacts to a CSV file """
+        try:
+            with open(self.csv_filename, mode='w', newline='') as file:
+                writer = csv.writer(file)
+                writer.writerow(["First Name", "Last Name", "Phone", "Email", "Address", "City", "State", "Zip Code"])
+                for contact in self.contacts:
+                    writer.writerow([contact.first_name, contact.last_name, contact.phone, contact.email, 
+                                     contact.address, contact.city, contact.state, contact.zip_code])
+            print(f"Contacts saved to {self.csv_filename}")
+        except Exception as e:
+            print(f"Error saving to CSV: {e}")
+    
+    def load_from_csv(self):
+        """ Loads contacts from a CSV file """
+        try:
+            with open(self.csv_filename, mode='r') as file:
+                reader = csv.reader(file)
+                next(reader)  # Skip the header row
+                self.contacts = [Contact(*row) for row in reader]
+            print(f"Contacts loaded from {self.csv_filename}")
+        except FileNotFoundError:
+            print(f"CSV file {self.csv_filename} not found. Starting fresh.")
+        except Exception as e:
+            print(f"Error loading from CSV: {e}")
+    
         
     
     def search_city(self,city):
@@ -309,7 +338,7 @@ class AddressBookSystem:
         """ Runs the Address Book System with a menu """
         while True:
             try:
-                print("\n1. Create Address Book\n2. Switch Address Book\n3. Add Contact\n4. View Contacts  \n5. Search by City \n6. view by state  \n7. count contact by city  \n8. count contact by state \n9.sort alphabetically \n10. sort by zip \n11.Save address book \n12.Load address book \n13. Exit")
+                print("\n1. Create Address Book\n2. Switch Address Book\n3. Add Contact\n4. View Contacts  \n5. Search by City \n6. view by state  \n7. count contact by city  \n8. count contact by state \n9.sort alphabetically \n10. sort by zip \n11.Save address book \n12.Load address book \n13. Save to csv  \n14. Load from csv \n15. Exit")
                 choice = input("Choose an option: ").strip()
 
                 if choice == "1":
@@ -381,8 +410,20 @@ class AddressBookSystem:
                         address_book.load_from_file(filename)
                     else:
                         print(f"Address Book '{book_name}' does not exist!")
-                  
+                        
                 elif choice == "13":
+                    if self.current_book:
+                        self.current_book.save_to_csv()
+                    else:
+                        print("No Address Book selected.")
+               
+                elif choice == "14":
+                    if self.current_book:
+                        self.current_book.load_from_csv()
+                    else:
+                        print("No Address Book selected.")
+        
+                elif choice == "15":
                     print("Exiting Address Book System.")
                     break
                 else:
