@@ -136,6 +136,7 @@ class AddressBook:
         self.name = name
         self.contacts = []
         self.filename=f"{self.name}.json"
+        self.filename_json=f"{self.name}.json"
         self.csv_filename = f"{self.name}.csv"
         self.load_contacts()
 
@@ -233,8 +234,22 @@ class AddressBook:
         except Exception as e:
             print(f"Error loading from CSV: {e}")
     
-        
+    def save_to_json(self):
+        """ Saves contacts to a JSON file """
+        with open(self.filename_json, 'w') as file:
+            json.dump([contact.to_dict() for contact in self.contacts], file, indent=4)
+        print(f"Contacts saved to {self.filename_json}")
     
+    def load_contacts(self):
+        """ Loads contacts from JSON file """
+        try:
+            with open(self.filename_json, 'r') as file:
+                data = json.load(file)
+                self.contacts = [Contact.from_dict(contact) for contact in data]
+            print(f"Contacts loaded from {self.filename_json}")
+        except (FileNotFoundError, json.JSONDecodeError):
+            print("No existing JSON file found, starting fresh.")
+            
     def search_city(self,city):
         """
         search and display by particular city
@@ -338,7 +353,7 @@ class AddressBookSystem:
         """ Runs the Address Book System with a menu """
         while True:
             try:
-                print("\n1. Create Address Book\n2. Switch Address Book\n3. Add Contact\n4. View Contacts  \n5. Search by City \n6. view by state  \n7. count contact by city  \n8. count contact by state \n9.sort alphabetically \n10. sort by zip \n11.Save address book \n12.Load address book \n13. Save to csv  \n14. Load from csv \n15. Exit")
+                print("\n1. Create Address Book\n2. Switch Address Book\n3. Add Contact\n4. View Contacts  \n5. Search by City \n6. view by state  \n7. count contact by city  \n8. count contact by state \n9.sort alphabetically \n10. sort by zip \n11.Save address book \n12.Load address book \n13. Save to csv  \n14. Load from csv \n15.Save to json  \n16. load from json \n17. Exit")
                 choice = input("Choose an option: ").strip()
 
                 if choice == "1":
@@ -422,8 +437,20 @@ class AddressBookSystem:
                         self.current_book.load_from_csv()
                     else:
                         print("No Address Book selected.")
-        
+                
                 elif choice == "15":
+                    if self.current_book:
+                        self.current_book.save_to_json()
+                    else:
+                        print("No Address Book selected.")
+               
+                elif choice == "16":
+                    if self.current_book:
+                        self.current_book.load_contacts()
+                    else:
+                        print("No Address Book selected.")
+        
+                elif choice == "17":
                     print("Exiting Address Book System.")
                     break
                 else:
