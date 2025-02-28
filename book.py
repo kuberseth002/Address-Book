@@ -300,23 +300,19 @@ class AddressBook:
         match = [contact for contact in self.contacts if contact.city.lower() == city.lower()]
         if match:
             logger.info(f"Contacts found in {city}: {len(match)} matches")
-            print(f"\nContacts found in {city}:")
             for contact in match:
                 print(contact)
         else:
             logger.info(f"No contacts found in {city}")
-            print(f"\nNo contacts found in {city}")
 
     def view_state(self, state):
         match = [contact for contact in self.contacts if contact.state.lower() == state.lower()]
         if match:
             logger.info(f"Contacts found in {state}: {len(match)} matches")
-            print(f"\nContacts found in {state}:")
             for contact in match:
                 print(contact)
         else:
             logger.info(f"No contacts found in {state}")
-            print(f"\nNo contacts found in {state}")
 
     def count_city(self, city):
         count = sum(1 for contact in self.contacts if contact.city.lower() == city.lower())
@@ -325,8 +321,7 @@ class AddressBook:
     def count_state(self, state):
         count = sum(1 for contact in self.contacts if contact.state.lower() == state.lower())
         logger.info(f"Number of contacts in {state}: {count}")
-        print(f"\nNumber of contacts in {state}: {count}")
-
+        
     def sort_contacts(self):
         def compare(contact):
             return contact.first_name.lower(), contact.last_name.lower()       
@@ -338,12 +333,10 @@ class AddressBook:
             return int(contact.zip_code)
         self.contacts.sort(key=compare_zip)
         logger.info(f"Contacts sorted by zip code in {self.name}")
-        print(f"\nContacts sorted by zip code in {self.name}")
 
     def view_contacts(self, sort_by="name"):
         if not self.contacts:
             logger.info(f"Address Book {self.name} is empty")
-            print(f"\nAddress Book {self.name} is empty")
         else:
             if sort_by == "zip":
                 self.sort_by_zip()
